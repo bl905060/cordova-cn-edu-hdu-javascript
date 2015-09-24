@@ -75,7 +75,7 @@ var getMedia = new Object ({
                 ic = document.getElementById(showImgDivId);
                 //Then write an image tag out to the div using the
                 //URL we received from the camera application.
-                ic.innerHTML = ic.innerHTML + '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + fileEntry.name + '" />';
+                ic.innerHTML = ic.innerHTML + '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + photoidprefix + '" />';
                 console.log(document.getElementById(showImgId).src);
                 console.log(document.getElementById(showImgId).title);
                 console.log(showImgId);
