@@ -1,29 +1,29 @@
 /*
  getMedia.takePhoto(mode, option, callback);
- mode:[1|2], 1:use camera to fetch photo, 
-             2:use photolibrary to fetch photo;
+ mode:[1|2], 1:use camera to fetch photo,
+ 2:use photolibrary to fetch photo;
  option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
  callback:when fetch photo sccuess, then callback this function;
-*/
+ */
 
 var getMedia = new Object ({
-
+                           
     //use mode to select camera source to take photo
     takePhoto : function (mode, option, callback) {
         var cameraSource;
-        
+                           
         var showImgDivId =option[0].toString();
         var showImgId = option[1].toString() + option[3].toString();
         var photoidprefix = option[2].toString();
         var count = option[3].toString();
-        
+       
         if (mode == 1) {
             cameraSource = Camera.PictureSourceType.CAMERA;
         }
         else if (mode == 2){
             cameraSource = Camera.PictureSourceType.PHOTOLIBRARY;
         }
-        
+                           
         //alert("takePhoto");
         navigator.camera.getPicture(onCameraSuccess, onCameraError, {
                                     quality: 100,
@@ -32,41 +32,41 @@ var getMedia = new Object ({
                                     targetWidth: 480,
                                     targetHeight: 800
                                     });
-        
+                           
         //Callback function when the photo has been caputred
         function onCameraSuccess(imageURL) {
-            
+                           
             console.log(imageURL);
             var newFileName = photoidprefix + count + ".jpg";
             console.log(newFileName);
             var dirName = "image";
-            
+                           
             window.resolveLocalFileSystemURL(imageURL, resolveOnSuccess, resOnError);
-            
+                           
             //Callback function when the file system url has been resolved
             function resolveOnSuccess(fileEntry){
                 console.log("resolve is success!");
-                
+                           
                 //request for file system
                 window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, getFileSystemSuccess,resOnError);
-                
+                           
                 function getFileSystemSuccess(fileSys) {
                     console.log("get file system is success!");
                     //The folder is created if doesn't exist
                     fileSys.root.getDirectory(dirName, {create:true, exclusive: false}, getDirSuccess, getDirFail);
-                    
+                           
                     function getDirSuccess(directory) {
                         console.log("get dir is success!");
-                           alert("get dir is success!");
+                        //alert("get dir is success!");
                         fileEntry.moveTo(directory, newFileName,  successMove, resOnError);
                     }
-                    
+                           
                     function getDirFail(){
                         console.log("get dir is failed!");
                     }
                 }
             }
-            
+                           
             //Callback function when the file has been moved successfully - inserting the complete path
             function successMove(fileEntry) {
                 console.log("move file is success!");
@@ -81,12 +81,12 @@ var getMedia = new Object ({
                 console.log(showImgId);
                 callback();
             }
-            
+                           
             function resOnError(error) {
                 alert(error.code);
             }
         }
-        
+                           
         function onCameraError() {
             navigator.notification.alert("onCameraError");
         }
@@ -160,10 +160,10 @@ var getMedia = new Object ({
 
             // Stop recording after 10 sec
             progressTimmer = setInterval(function() {
-                            recTime = recTime + 1;
-                            setAudioPosition('media_rec_pos', recTime + " sec");
-                            console.log("***test: interval-func()***");
-                            }, 1000);
+                recTime = recTime + 1;
+                setAudioPosition('media_rec_pos', recTime + " sec");
+                console.log("***test: interval-func()***");
+            }, 1000);
 
         }
     },
@@ -185,29 +185,30 @@ var getMedia = new Object ({
 
     clearProgressTimmer : function () {
         if (progressTimmer) {
-            clearInterval(progressTimmer);
-            progressTimmer = null;
+        clearInterval(progressTimmer);
+        progressTimmer = null;
         }
     }
 
     setAudioPosition : function (audioPosID, position) {
-    if(audioPosID == "media_rec_pos"){
-    document.getElementById(audioPosID).innerHTML = "Recording position: 00:00:"+position;
-    }
-    if(audioPosID == "media_pos"){
-    document.getElementById(audioPosID).innerHTML = "Playback position: 00:00:"+position;
-    }
+        if(audioPosID == "media_rec_pos"){
+            document.getElementById(audioPosID).innerHTML = "Recording position: 00:00:"+position;
+        }
+
+        if(audioPosID == "media_pos"){
+            document.getElementById(audioPosID).innerHTML = "Playback position: 00:00:"+position;
+        }
     }
 
     onMediaCallSuccess : function () {
-    console.log("***test: new Media() succeeded ***");
+        console.log("***test: new Media() succeeded ***");
     }
 
     onMediaCallError : function () {
-    console.log("***test: new Media() failed ***");
+        console.log("***test: new Media() failed ***");
     }
 
     getAudioFileSystemError : function () {
-    console.log("***test: failed in creating media file in requestFileSystem");
+        console.log("***test: failed in creating media file in requestFileSystem");
     }*/
 });
