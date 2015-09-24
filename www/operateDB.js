@@ -9,7 +9,8 @@
     example: operateDB.queryData('goodslist', '*', 'id = ?', [id], readData);
 
     insert:function saveData
-    @param tablename, insertFields, insertParams, callback
+    @param count, tablename, insertFields, insertParams, callback
+        count:需要插入的记录数目
         tablename:表名
         insertFields:需要插入的字段
         insertParams:需要插入的数据
@@ -18,7 +19,7 @@
         var insertField = ['user_id', 'goods_id', 'goods_name', 'goods_barcode', 'goods_brand', 'goods_category', 'goods_descr', 'goods_unit', 'goods_manufacturer', 'goods_stockprice', 'goods_saleprice', 'quantity', 'goods_status', 'goods_remark', 'photo_id', 'photo_url', 'timestamp', 'delflag', 'goods_ntu'];
         var insertParam = [user_id, goods_id, goods_name, goods_barcode, goods_brand, goods_category, goods_descr, goods_unit, goods_manufacturer, goods_stockprice, goods_saleprice, quantity, goods_status, goods_remark, photo_id, photo_url, timestamp, delflag, goods_ntu];
          
-        operateDB.saveData('goodslist', insertField, insertParam, saveSuccess);
+        operateDB.saveData(count, 'goodslist', insertField, insertParam, saveSuccess);
 
     update:function updateData
     @param tableName, setFileds, setParams, whereStr, whereParams, callback
