@@ -83,13 +83,13 @@ var operateDB = new Object({
         }
     },
 
-    saveData : function (tableName, insertFields, insertParams, callback) {
+    saveData : function (count, tableName, insertFields, insertParams, callback) {
         console.log("saveDB is begin!");
         
         var mydb = operateDB.openDB();
         
         var sql = 'INSERT INTO ' + tableName + ' (';
-        var params = ' VALUES (';
+        var params = ' (';
         
         for (i in insertFields) {
             sql += insertFields[i] + ', ';
@@ -100,14 +100,23 @@ var operateDB = new Object({
         sql += ')';
         params += ')';
         
-        console.log(sql + params);
+        var temp = params;
+                           
+        while (count > 1) {
+            temp = temp + ', ' + params;
+            count--;
+        }
+                           
+        params = temp;
+        
+        console.log(sql + ' VALUES ' + params);
         console.log(insertParams);
         
         mydb.transaction(insertData, errorData);
         
         function insertData(tx) {
             console.log("sql is ready to run!");
-            tx.executeSql(sql + params, insertParams, insertSuccess, errorData);
+            tx.executeSql(sql + ' VALUES ' + params, insertParams, insertSuccess, errorData);
             console.log("sql is executed!");
         }
         

@@ -1,9 +1,11 @@
 /*
- getMedia.takePhoto(mode, option, callback);
- mode:[1|2], 1:use camera to fetch photo,
- 2:use photolibrary to fetch photo;
- option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
- callback:when fetch photo sccuess, then callback this function;
+    fetchPhoto:function takePhoto
+    @param mode, option, callback
+        mode:[1|2], 1:use camera to fetch photo,
+                    2:use photolibrary to fetch photo;
+        option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
+        callback:when fetch photo sccuess, then callback this function;
+    example:getMedia.takePhoto(mode, option, callback);
  */
 
 var getMedia = new Object ({
