@@ -1,8 +1,21 @@
+/*
+ getMedia.takePhoto(mode, option, callback);
+ mode:[1|2], 1:use camera to fetch photo, 
+             2:use photolibrary to fetch photo;
+ option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
+ callback:when fetch photo sccuess, then callback this function;
+*/
+
 var getMedia = new Object ({
 
     //use mode to select camera source to take photo
-    takePhoto : function (mode, showImgDivId, showImgId) {
+    takePhoto : function (mode, option, callback) {
         var cameraSource;
+        
+        var showImgDivId =option[0].toString();
+        var showImgId = option[1].toString() + option[3].toString();
+        var photoidprefix = option[2].toString();
+        var count = option[3].toString();
         
         if (mode == 1) {
             cameraSource = Camera.PictureSourceType.CAMERA;
@@ -24,8 +37,8 @@ var getMedia = new Object ({
         function onCameraSuccess(imageURL) {
             
             console.log(imageURL);
-            var photoid = new Date.getTime();
-            var newFileName = photoid + ".jpg";
+            var newFileName = photoidprefix + count + ".jpg";
+            console.log(newFileName);
             var dirName = "image";
             
             window.resolveLocalFileSystemURL(imageURL, resolveOnSuccess, resOnError);
@@ -44,6 +57,7 @@ var getMedia = new Object ({
                     
                     function getDirSuccess(directory) {
                         console.log("get dir is success!");
+                           alert("get dir is success!");
                         fileEntry.moveTo(directory, newFileName,  successMove, resOnError);
                     }
                     
@@ -61,10 +75,11 @@ var getMedia = new Object ({
                 ic = document.getElementById(showImgDivId);
                 //Then write an image tag out to the div using the
                 //URL we received from the camera application.
-                ic.innerHTML = '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + fileEntry.name + '" />';
+                ic.innerHTML = ic.innerHTML + '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + fileEntry.name + '" />';
                 console.log(document.getElementById(showImgId).src);
                 console.log(document.getElementById(showImgId).title);
                 console.log(showImgId);
+                callback();
             }
             
             function resOnError(error) {
