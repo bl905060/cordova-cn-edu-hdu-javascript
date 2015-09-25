@@ -1,9 +1,9 @@
 /*
     fetchPhoto:function takePhoto
-    @param mode, option, callback
+    @param option, callback
         option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
         callback:when fetch photo sccuess, then callback this function;
-    example:getMedia.takePhoto(mode, option, callback);
+    example:getMedia.takePhoto(option, callback);
  
     caution:before use this function, please install actionsheet of cordova plugin first.
     $ cordova plugin add cordova-plugin-actionsheet
@@ -15,7 +15,6 @@
     var photoOption = ['addImgDiv', 'addImg', prefix, count];
      
     if (prefix>0 & count<6){
-        //getMedia.takePhoto(2, photoOption, takePhotoSuccess);
         getMedia.takePhoto(photoOption, takePhotoSuccess);
         alert(prefix + " " + count);
     }
