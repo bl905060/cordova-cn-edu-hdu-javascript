@@ -7,12 +7,31 @@
  
     caution:before use this function, please install actionsheet of cordova plugin first.
     $ cordova plugin add cordova-plugin-actionsheet
+ 
+    for instance:
+    if (!prefix) {
+        prefix = new Date().getTime();
+    }
+    var photoOption = ['addImgDiv', 'addImg', prefix, count];
+     
+    if (prefix>0 & count<6){
+        //getMedia.takePhoto(2, photoOption, takePhotoSuccess);
+        getMedia.takePhoto(photoOption, takePhotoSuccess);
+        alert(prefix + " " + count);
+    }
+    else if (count>=6){
+        alert("只允许上传5张照片");
+    }
+     
+    function takePhotoSuccess() {
+        count++;
+    }
  */
 
 var getMedia = new Object ({
                            
     //use mode to select camera source to take photo
-    takePhoto : function (option, callback) {
+    takePhoto : function (option, takePhotoSuccess) {
         
         var cameraSource;
         var mode;
@@ -28,6 +47,10 @@ var getMedia = new Object ({
         function sheetSuccess(buttonIndex) {
             mode = buttonIndex;
             //alert(mode);
+                           
+            if (mode == 3) {
+                return;
+            }
             
             var showImgDivId =option[0].toString();
             var showImgId = option[1].toString() + option[3].toString();
@@ -97,7 +120,7 @@ var getMedia = new Object ({
                     console.log(document.getElementById(showImgId).src);
                     console.log(document.getElementById(showImgId).title);
                     console.log(showImgId);
-                    callback();
+                    takePhotoSuccess();
                 }
                            
                 function resOnError(error) {
@@ -106,7 +129,8 @@ var getMedia = new Object ({
             }
                            
             function onCameraError() {
-                navigator.notification.alert("onCameraError");
+                //navigator.notification.alert("onCameraError");
+                console.log("onCameraError");
             }
         }
     },
