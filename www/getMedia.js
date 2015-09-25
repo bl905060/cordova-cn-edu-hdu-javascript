@@ -1,96 +1,113 @@
 /*
     fetchPhoto:function takePhoto
     @param mode, option, callback
-        mode:[1|2], 1:use camera to fetch photo,
-                    2:use photolibrary to fetch photo;
         option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
         callback:when fetch photo sccuess, then callback this function;
     example:getMedia.takePhoto(mode, option, callback);
+ 
+    caution:before use this function, please install actionsheet of cordova plugin first.
+    $ cordova plugin add cordova-plugin-actionsheet
  */
 
 var getMedia = new Object ({
                            
     //use mode to select camera source to take photo
-    takePhoto : function (mode, option, callback) {
+    takePhoto : function (option, callback) {
+        
         var cameraSource;
+        var mode;
+        
+        var sheetOption = {
+            'title': '添加照片',
+            'buttonLabels': ['照相机拍照', '从相册获取'],
+            'addCancelButtonWithLabel': '取消',
+        };
                            
-        var showImgDivId =option[0].toString();
-        var showImgId = option[1].toString() + option[3].toString();
-        var photoidprefix = option[2].toString();
-        var count = option[3].toString();
-       
-        if (mode == 1) {
-            cameraSource = Camera.PictureSourceType.CAMERA;
-        }
-        else if (mode == 2){
-            cameraSource = Camera.PictureSourceType.PHOTOLIBRARY;
-        }
+        window.plugins.actionsheet.show(sheetOption, sheetSuccess);
                            
-        //alert("takePhoto");
-        navigator.camera.getPicture(onCameraSuccess, onCameraError, {
-                                    quality: 100,
-                                    sourceType: cameraSource,
-                                    destinationType: Camera.DestinationType.FILE_URI,
-                                    targetWidth: 480,
-                                    targetHeight: 800
-                                    });
+        function sheetSuccess(buttonIndex) {
+            mode = buttonIndex;
+            //alert(mode);
+            
+            var showImgDivId =option[0].toString();
+            var showImgId = option[1].toString() + option[3].toString();
+            var photoidprefix = option[2].toString();
+            var count = option[3].toString();
+                        
+            if (mode == 1) {
+                cameraSource = Camera.PictureSourceType.CAMERA;
+            }
+            else if (mode == 2){
+                cameraSource = Camera.PictureSourceType.PHOTOLIBRARY;
+            }
+            //alert(cameraSource);
+                
+            //alert("takePhoto");
+            navigator.camera.getPicture(onCameraSuccess, onCameraError, {
+                quality: 100,
+                sourceType: cameraSource,
+                destinationType: Camera.DestinationType.FILE_URI,
+                targetWidth: 480,
+                targetHeight: 800
+            });
                            
-        //Callback function when the photo has been caputred
-        function onCameraSuccess(imageURL) {
+            //Callback function when the photo has been caputred
+            function onCameraSuccess(imageURL) {
+                
+                console.log(imageURL);
+                var newFileName = photoidprefix + count + ".jpg";
+                console.log(newFileName);
+                var dirName = "image";
                            
-            console.log(imageURL);
-            var newFileName = photoidprefix + count + ".jpg";
-            console.log(newFileName);
-            var dirName = "image";
+                window.resolveLocalFileSystemURL(imageURL, resolveOnSuccess, resOnError);
                            
-            window.resolveLocalFileSystemURL(imageURL, resolveOnSuccess, resOnError);
+                //Callback function when the file system url has been resolved
+                function resolveOnSuccess(fileEntry){
+                    console.log("resolve is success!");
                            
-            //Callback function when the file system url has been resolved
-            function resolveOnSuccess(fileEntry){
-                console.log("resolve is success!");
+                    //request for file system
+                    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, getFileSystemSuccess,resOnError);
                            
-                //request for file system
-                window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, getFileSystemSuccess,resOnError);
+                    function getFileSystemSuccess(fileSys) {
+                        console.log("get file system is success!");
+                        //The folder is created if doesn't exist
+                        fileSys.root.getDirectory(dirName, {create:true, exclusive: false}, getDirSuccess, getDirFail);
                            
-                function getFileSystemSuccess(fileSys) {
-                    console.log("get file system is success!");
-                    //The folder is created if doesn't exist
-                    fileSys.root.getDirectory(dirName, {create:true, exclusive: false}, getDirSuccess, getDirFail);
+                        function getDirSuccess(directory) {
+                           console.log("get dir is success!");
+                           //alert("get dir is success!");
+                           fileEntry.moveTo(directory, newFileName,  successMove, resOnError);
+                        }
                            
-                    function getDirSuccess(directory) {
-                        console.log("get dir is success!");
-                        //alert("get dir is success!");
-                        fileEntry.moveTo(directory, newFileName,  successMove, resOnError);
+                        function getDirFail(){
+                           console.log("get dir is failed!");
+                        }
                     }
+                }
                            
-                    function getDirFail(){
-                        console.log("get dir is failed!");
-                    }
+                //Callback function when the file has been moved successfully - inserting the complete path
+                function successMove(fileEntry) {
+                    console.log("move file is success!");
+                    //I do my insert with "fileEntry.fullPath" as for the path
+                    //Get a handle to the image container div
+                    ic = document.getElementById(showImgDivId);
+                    //Then write an image tag out to the div using the
+                    //URL we received from the camera application.
+                    ic.innerHTML = ic.innerHTML + '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + photoidprefix + '" />';
+                    console.log(document.getElementById(showImgId).src);
+                    console.log(document.getElementById(showImgId).title);
+                    console.log(showImgId);
+                    callback();
+                }
+                           
+                function resOnError(error) {
+                    alert(error.code);
                 }
             }
                            
-            //Callback function when the file has been moved successfully - inserting the complete path
-            function successMove(fileEntry) {
-                console.log("move file is success!");
-                //I do my insert with "fileEntry.fullPath" as for the path
-                //Get a handle to the image container div
-                ic = document.getElementById(showImgDivId);
-                //Then write an image tag out to the div using the
-                //URL we received from the camera application.
-                ic.innerHTML = ic.innerHTML + '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + photoidprefix + '" />';
-                console.log(document.getElementById(showImgId).src);
-                console.log(document.getElementById(showImgId).title);
-                console.log(showImgId);
-                callback();
+            function onCameraError() {
+                navigator.notification.alert("onCameraError");
             }
-                           
-            function resOnError(error) {
-                alert(error.code);
-            }
-        }
-                           
-        function onCameraError() {
-            navigator.notification.alert("onCameraError");
         }
     },
                            
