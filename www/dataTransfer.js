@@ -1,5 +1,36 @@
+/*
+     uploadData:function uploadData
+     @param postURL, postData, uploadSuccess, uploadFail
+         postURL:the server's url, you want to post data;
+         postData:the data, you want to post to server;
+         uploadSuccess:when upload sccuess, then callback this function;
+         uploadFail:when upload fail, then callback this function;
+     example:dataTransfer.uploadData(postURL, postData, uploadSuccess, uploadFail);
+ 
+     var registerData = {
+         "user_name" : UserName,
+         "status" : 0,
+         "user_type" : UserType,
+         "user_mobile" : Phone,
+         "IsReg" : 1,
+         "user_password" : Passcode,
+         "user_id" : null,
+         "user_org" : Companyname,
+         "user_email" : Email,
+         "user_photoid" : null
+     };
+ 
+     var testname="test";
+     var testpasscode="testpasscode";
+ 
+     //var postData = "para1's name=" + para1 + "&para2's name=" + para2 + ... + "&paraN's name=" + paraN;
+     var postData = "json=" + JSON.stringify(registerData) + "&testname=" + testname + "&testpasscode=" + testpasscode;
+ 
+     dataTransfer.uploadData(postURL, postData, uploadSuccess, uploadFail);
+ */
+
 var dataTransfer = new Object ({
-    uploadData : function (postURL, jsonData, uploadSuccess, uploadFail){
+    uploadData : function (postURL, postData, uploadSuccess, uploadFail){
         console.log("upLoadData is begin!");
         var xmlhttp;
         xmlhttp = new XMLHttpRequest();
@@ -8,7 +39,7 @@ var dataTransfer = new Object ({
         xmlhttp.onreadystatechange = received;
         xmlhttp.open("POST", postURL, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("json=" + JSON.stringify(jsonData));
+        xmlhttp.send(postData);
         console.log("web post is done!");
 
         function timeout() {
