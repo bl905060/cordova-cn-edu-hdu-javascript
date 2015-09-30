@@ -109,7 +109,7 @@ var operateDB = new Object({
         var params = new Array();
         var successCount = 0;
         
-        alert(tableCount);
+        //alert("tablecount:" + tableCount);
                            
         for (c=1; c<=tableCount; c++) {
              sql[c] = 'INSERT INTO ' + tableName[c-1] + ' (';
@@ -150,8 +150,6 @@ var operateDB = new Object({
                 
         mydb.transaction(insertData, errorData);
         
-        callback();
-        
         function insertData(tx) {
             console.log("sql is ready to run!");
             for (c=1; c<=tableCount; c++) {
@@ -163,7 +161,8 @@ var operateDB = new Object({
         function insertSuccess() {
             console.log("Data write Success!");
             successCount++;
-            alert(successCount);
+            //alert("successCount:" + successCount);
+            //alert(successCount == tableCount);
             if (successCount == tableCount) {
                 callback();
             }
@@ -174,7 +173,7 @@ var operateDB = new Object({
         }
     },
 
-    updateData : function (tableName, setFileds, setParams, whereStr, whereParams, callback) {
+    updateData : function (tableName, setFileds, setParams, whereStr, whereParams, renewSccuess) {
         console.log("updateDB is begin!");
         
         var mydb = operateDB.openDB();
@@ -200,6 +199,7 @@ var operateDB = new Object({
         
         function updateSuccess() {
             console.log("Data renew is done!");
+            renewSccuess()
         }
         
         function errorData(err) {
