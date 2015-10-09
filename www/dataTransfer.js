@@ -23,6 +23,8 @@
      var testname="test";
      var testpasscode="testpasscode";
  
+     var uploadDataURL = "http://10.1.17.22/dingdong/index.php/Home/Save/savegoods";
+ 
      //var postData = "para1's name=" + para1 + "&para2's name=" + para2 + ... + "&paraN's name=" + paraN;
      var postData = "json=" + JSON.stringify(registerData) + "&testname=" + testname + "&testpasscode=" + testpasscode;
  
