@@ -199,7 +199,7 @@ var operateDB = new Object({
         
         function updateSuccess() {
             console.log("Data renew is done!");
-            renewSccuess()
+            renewSccuess();
         }
         
         function errorData(err) {
