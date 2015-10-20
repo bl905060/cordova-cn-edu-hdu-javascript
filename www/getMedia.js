@@ -52,7 +52,7 @@ var getMedia = new Object ({
             }
             
             var showImgDivId =option[0].toString();
-            var showImgId = option[1].toString() + option[3].toString();
+            var showImgId = option[1].toString() + (option[3] - 1).toString();
             var photoidprefix = option[2].toString();
             var count = option[3].toString();
                         
