@@ -9,22 +9,29 @@
     $ cordova plugin add cordova-plugin-actionsheet
  
     for instance:
-    if (!prefix) {
-        prefix = new Date().getTime();
-    }
-    var photoOption = ['addImgDiv', 'addImg', prefix, count];
+    function load(){
+        var prefix=0;
+        var count=1;
      
-    if (prefix>0 & count<6){
-        getMedia.takePhoto(photoOption, takePhotoSuccess);
-        alert(prefix + " " + count);
-    }
-    else if (count>=6){
-        alert("只允许上传5张照片");
-    }
-     
-    function takePhotoSuccess() {
-        count++;
-    }
+        document.getElementById("takePhoto").addEventListener('touchstart',function() {
+            if (!prefix) {
+                prefix = new Date().getTime();
+            }
+            var photoOption = ['addImgDiv', 'addImg', prefix, count];
+         
+            if (prefix>0 & count<6){
+                getMedia.takePhoto(photoOption, takePhotoSuccess);
+                //alert(prefix + " " + count);
+            }
+            else if (count>=6){
+                alert("只允许上传5张照片");
+            }
+             
+            function takePhotoSuccess() {
+                count++;
+            }
+        }, false);
+    } 
  */
 
 var getMedia = new Object ({
