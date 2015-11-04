@@ -11,28 +11,29 @@
     for instance:
     function load(){
         var prefix=0;
-        var count=1;
-     
+        var count=0;
+         
         document.getElementById("takePhoto").addEventListener('touchstart',function() {
             if (!prefix) {
                 prefix = new Date().getTime();
             }
+         
             var photoOption = ['addImgDiv', 'addImg', prefix, count];
          
-            if (prefix>0 & count<6){
+            if (prefix>0 & count<5){
                 getMedia.takePhoto(photoOption, takePhotoSuccess);
                 //alert(prefix + " " + count);
             }
-            else if (count>=6){
+            else if (count>=5){
                 alert("只允许上传5张照片");
             }
-             
+         
             function takePhotoSuccess() {
                 count++;
             }
         }, false);
-    } 
- */
+    }
+*/
 
 var getMedia = new Object ({
                            
@@ -59,7 +60,7 @@ var getMedia = new Object ({
             }
             
             var showImgDivId =option[0].toString();
-            var showImgId = option[1].toString() + (option[3] - 1).toString();
+            var showImgId = option[1].toString() + option[3].toString();
             var photoidprefix = option[2].toString();
             var count = option[3].toString();
                         
@@ -122,7 +123,7 @@ var getMedia = new Object ({
                     ic = document.getElementById(showImgDivId);
                     //Then write an image tag out to the div using the
                     //URL we received from the camera application.
-                    if (option[3] > 1) {
+                    if (option[3] > 0) {
                         ic.innerHTML = ic.innerHTML + '<img id="' + showImgId + '" src="' + fileEntry.toURL() + '" width=100% title="' + photoidprefix + '" />';
                     }
                     else {
