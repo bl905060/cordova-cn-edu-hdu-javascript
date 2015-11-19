@@ -68,6 +68,11 @@ var operateDB = new Object({
         
         return mydb;
     },
+                           
+    closeDB : function (mydb) {
+        mydb.close();
+        console.log("database is closed!");
+    },
 
     queryData : function (tableName, selectFields, whereStr, whereParams, callback) {
         console.log("queryDB is begin!");
@@ -148,7 +153,7 @@ var operateDB = new Object({
         }
         
                 
-        mydb.transaction(insertData, errorData);
+        mydb.transaction(insertData, errorData, execSuccess);
         
         function insertData(tx) {
             console.log("sql is ready to run!");
@@ -163,13 +168,16 @@ var operateDB = new Object({
             successCount++;
             //alert("successCount:" + successCount);
             //alert(successCount == tableCount);
-            if (successCount == tableCount) {
-                callback();
-            }
         }
         
         function errorData(err) {
             alert("Error processing SQL:" + err.code);
+        }
+        
+        function execSuccess() {
+            //alert("transaction is done!");
+            callback();
+            operateDB.closeDB(mydb);
         }
     },
 
