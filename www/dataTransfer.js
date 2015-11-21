@@ -23,7 +23,7 @@
      var testname="test";
      var testpasscode="testpasscode";
  
-     var postURL = "http://10.1.17.22/dingdong/index.php/Home/Save/savegoods";
+     var uploadDataURL = "http://10.1.17.22/dingdong/index.php/Home/Save/savegoods";
  
      //var postData = "para1's name=" + para1 + "&para2's name=" + para2 + ... + "&paraN's name=" + paraN;
      var postData = "json=" + JSON.stringify(registerData) + "&testname=" + testname + "&testpasscode=" + testpasscode;
@@ -32,50 +32,53 @@
  */
 
 var dataTransfer = new Object ({
-    uploadData : function (postURL, postData, uploadSuccess, uploadFail){
-        console.log("upLoadData is begin!");
-        var xmlhttp;
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.timeout = 2000;
-        xmlhttp.ontimeout = timeout;
-        xmlhttp.onreadystatechange = received;
-        xmlhttp.open("POST", postURL, true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send(postData);
-        console.log("web post is done!");
-
-        function timeout() {
-            console.log("web post was aborted!");
-            var response = "request is timeout!";
-            uploadFail(response);
-        }
-
-        function received(){
-            console.log("response was received!");
-            console.log("xmlhttp.readyState:" + xmlhttp.readyState);
-            console.log("xmlhttp.status:" +xmlhttp.status);
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    var response = xmlhttp.responseText;
-                    uploadSuccess(response);
-                }
-                else {
-                    var response = "error code:" + xmlhttp.status;
-                    uploadFail(response);
-                }
-            }
+    //receiveData : '',
+            
+    download : function (responseData) {
+        console.log("begin to download!");
+        
+        var downloadURL = "http://115.159.76.70/dingdong/index.php/Home/Getdata/getbasicdata";
+        var date = new Date(new Date().getTime() - 15 * 60 *1000);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        
+        var timestamp = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                               
+        var json = {
+            "user_id" : responseData.user_id,
+            "org_id" : responseData.org_id,
+            "timestamp" : timestamp
+        };
+        
+        var sendData = {
+            "json" : json
+        };
+        
+        dataTransfer.requestData(downloadURL, sendData, requestSuccess);
+        
+        function requestSuccess(receiveData) {
+            alert("responseData:" + JSON.stringify(receiveData));
         }
     },
-    
-    loadXML : function (xmlurl, loadSuccess){
-        console.log("load xml is begin!");
-        var xmlhttp;
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", xmlurl, false);
-        xmlhttp.send()
-        xmlDoc = xmlhttp.responseXML.documentElement;
-        if (xmlDoc == null) alert("read xml is error!");
-        console.log("load xml is done!");
-        loadSuccess(xmlDoc);
+                               
+    requestData : function (downloadURL, sendData, requestSuccess) {
+                               
+        //var receiveData;
+                               //var that = this;
+                               
+        dataTransceiver.upload(downloadURL, sendData, downloadSuccess, downloadFail);
+
+        function downloadSuccess(responseData) {
+            //alert("responseData:" + JSON.stringify(responseData));
+            requestSuccess(responseData);
+        }
+
+        function downloadFail(response) {
+            alert(response);
+        }
     }
 });
