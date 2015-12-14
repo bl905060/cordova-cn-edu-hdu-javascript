@@ -14,6 +14,10 @@
         document.getElementById("takePhoto").addEventListener('touchstart',function() {
             var photoOption = ['addImgDiv', 'addImg'];
             getMedia.takePhoto(photoOption, takePhotoSuccess);
+            
+            function takePhotoSuccess() {
+                alert(getMedia.photoCount);
+            }
         }, false);
     }
 */
