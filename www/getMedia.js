@@ -1,36 +1,19 @@
 /*
     fetchPhoto:function takePhoto
-    @param option, callback
-        option:['ImgDivId', 'ImgId', photoidprefix, count], this param is an array;
+    @param option
+        option:['ImgDivId', 'ImgId'], this param is an array;
         callback:when fetch photo sccuess, then callback this function;
     example:getMedia.takePhoto(option, callback);
  
-    caution:before use this function, please install actionsheet of cordova plugin first.
+    caution:before use this function, please install actionsheet of cordova plugin and idcode of cordova plugin first.
     $ cordova plugin add cordova-plugin-actionsheet
+    $ cordova plugin add https://github.com/bl905060/cordova-plugin-idcode
  
     for instance:
     function load(){
-        var prefix=0;
-        var count=0;
-         
         document.getElementById("takePhoto").addEventListener('touchstart',function() {
-            if (!prefix) {
-                prefix = new Date().getTime();
-            }
-         
-            var photoOption = ['addImgDiv', 'addImg', prefix, count];
-         
-            if (prefix>0 & count<5){
-                getMedia.takePhoto(photoOption, takePhotoSuccess);
-                //alert(prefix + " " + count);
-            }
-            else if (count>=5){
-                alert("只允许上传5张照片");
-            }
-         
-            function takePhotoSuccess() {
-                count++;
-            }
+            var photoOption = ['addImgDiv', 'addImg'];
+            getMedia.takePhoto(photoOption, takePhotoSuccess);
         }, false);
     }
 */
@@ -168,7 +151,7 @@ var getMedia = new Object ({
                     console.log(document.getElementById(showImgId).title);
                     console.log(document.getElementById(showImgId).getAttribute("photoCount"));
                     console.log(showImgId);
-                    //takePhotoSuccess();
+                    takePhotoSuccess();
                 }
 
                 function resOnError(error) {
