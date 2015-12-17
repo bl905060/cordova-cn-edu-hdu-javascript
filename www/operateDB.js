@@ -60,16 +60,24 @@
 */
 
 var operateDB = new Object({
+    mydb : '',
 
     openDB : function () {
-        var mydb = window.sqlitePlugin.openDatabase({name: "showapp.db", createFromLocation: 1});
+        console.log("begin to open database!");
+        this.mydb = window.sqlitePlugin.openDatabase({name: "myshop.db"}, successOB, errorOB);
         
-        console.log("database is open!");
-        
-        return mydb;
+        function successOB() {
+            console.log("database is open!");
+        }
+                           
+        function errorOB() {
+            console.log("open database is failure!");
+        }
+                           
+        return this.mydb
     },
                            
-    closeDB : function (mydb) {
+    closeDB : function () {
         mydb.close();
         console.log("database is closed!");
     },
@@ -77,8 +85,9 @@ var operateDB = new Object({
     queryData : function (tableName, selectFields, whereStr, whereParams, callback) {
         console.log("queryDB is begin!");
         
-        var mydb = operateDB.openDB();
-        
+        //var mydb = operateDB.openDB();
+        operateDB.openDB();
+                           
         var sql = 'SELECT ' + selectFields + ' FROM ' + tableName;
         if (typeof(whereStr) != 'undefined' && typeof(whereParams) != 'undefined' && whereStr != ""){
             sql += ' WHERE ' + whereStr;
@@ -86,7 +95,7 @@ var operateDB = new Object({
     
         console.log(sql + whereParams);
         
-        mydb.transaction(searchData, errorData);
+        this.mydb.transaction(searchData, errorData);
         
         function searchData(tx) {
             console.log("sql is ready to run!");
@@ -107,7 +116,8 @@ var operateDB = new Object({
     saveData : function (option, tableName, insertFields, insertParams, callback) {
         console.log("saveDB is begin!");
         
-        var mydb = operateDB.openDB();
+        //var mydby = operateDB.openDB();
+        operateDB.openDB();
         
         var tableCount = option[0];
         var sql = new Array();
@@ -153,7 +163,7 @@ var operateDB = new Object({
         }
         
                 
-        mydb.transaction(insertData, errorData, execSuccess);
+        this.mydb.transaction(insertData, errorData, execSuccess);
         
         function insertData(tx) {
             console.log("sql is ready to run!");
@@ -177,14 +187,15 @@ var operateDB = new Object({
         function execSuccess() {
             //alert("transaction is done!");
             callback();
-            operateDB.closeDB(mydb);
+            //operateDB.closeDB(mydb);
         }
     },
 
     updateData : function (tableName, setFileds, setParams, whereStr, whereParams, renewSccuess) {
         console.log("updateDB is begin!");
         
-        var mydb = operateDB.openDB();
+        //var mydb = operateDB.openDB();
+                           operateDB.openDB();
         
         var sql = 'UPDATE ' + tableName + ' SET ';
         for (i in setFileds) {
@@ -197,7 +208,7 @@ var operateDB = new Object({
         console.log(sql);
         console.log(setParams);
         
-        mydb.transaction(renewData, errorData);
+        this.mydb.transaction(renewData, errorData);
         
         function renewData(tx) {
             console.log("sql is ready to run!");
