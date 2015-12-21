@@ -27,10 +27,14 @@
  
         document.getElementById("takePhoto").addEventListener('touchstart',function() {
             var photoOption = ['addImgDiv', 'addImg'];
-            getMedia.takePhoto(photoOption, takePhotoSuccess);
+            getMedia.takePhoto(photoOption);
         }, false);
 
-        photoCount = getMedia.photoCount;
+        photoCount = document.getElementById(showImgId).getAttribute("photoCount");
+        
+        OR
+ 
+        photoCount = takeMedia.photoCount;
     }
 */
 
