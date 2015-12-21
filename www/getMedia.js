@@ -16,11 +16,20 @@
             var photoOption = ['addImgDiv', 'addImg'];
             getMedia.takePhoto(photoOption, takePhotoSuccess);
  
-            function takePhotoSuccess() {
-                //do something
+            function takePhotoSuccess(result) {
+                alert(result.src);
+                alert(result.photoidprefix);
+                alert(result.photoCount);
             }
         }, false);
  
+        or
+ 
+        document.getElementById("takePhoto").addEventListener('touchstart',function() {
+            var photoOption = ['addImgDiv', 'addImg'];
+            getMedia.takePhoto(photoOption, takePhotoSuccess);
+        }, false);
+
         photoCount = getMedia.photoCount;
     }
 */
@@ -152,7 +161,13 @@ var getMedia = new Object ({
                     console.log(document.getElementById(showImgId).title);
                     console.log(document.getElementById(showImgId).getAttribute("photoCount"));
                     console.log(showImgId);
-                    takePhotoSuccess();
+                    if (typeof(takePhotoSuccess) === "function") {
+                        var result = new Object();
+                        result.src = fileEntry.toURL();
+                        result.photoidprefix = photoidprefix;
+                        result.photoCount = photoCount;
+                        takePhotoSuccess(result);
+                    }
                 }
 
                 function resOnError(error) {
