@@ -34,7 +34,7 @@
         
         OR
  
-        photoCount = takeMedia.photoCount;
+        photoNum = takeMedia.photoNum;
     }
 */
 
@@ -43,6 +43,10 @@ var getMedia = new Object ({
     
     deletePhoto : function () {
         this.photoCount--;
+    },
+                           
+    photoNum : function () {
+        return this.photoCount;
     },
     
     idcode : 0,
