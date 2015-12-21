@@ -5,20 +5,23 @@
         callback:when fetch photo sccuess, then callback this function;
     example:getMedia.takePhoto(option, callback);
  
-    caution:before use this function, please install actionsheet of cordova plugin and idcode of cordova plugin first.
+    caution:before use this function, please install some of cordova plugin first are following.
     $ cordova plugin add cordova-plugin-actionsheet
-    $ cordova plugin add https://github.com/bl905060/cordova-plugin-idcode
+    $ cordova plugin add https://github.com/bl905060/cordova-plugin-md5-idcode.git
+    $ cordova plugin add https://github.com/bl905060/cordova-plugin-operate-plist.git
  
     for instance:
     function load(){
         document.getElementById("takePhoto").addEventListener('touchstart',function() {
             var photoOption = ['addImgDiv', 'addImg'];
             getMedia.takePhoto(photoOption, takePhotoSuccess);
-            
+ 
             function takePhotoSuccess() {
-                alert(getMedia.photoCount);
+                //do something
             }
         }, false);
+ 
+        photoCount = getMedia.photoCount;
     }
 */
 
@@ -33,7 +36,6 @@ var getMedia = new Object ({
                            
     //use mode to select camera source to take photo
     takePhoto : function (option, takePhotoSuccess) {
-        
         var that = this;
         var cameraSource;
         var mode;
@@ -53,7 +55,7 @@ var getMedia = new Object ({
                            
         function sheetSuccess(buttonIndex) {
             mode = buttonIndex;
-            //alert(mode);
+            alert(mode);
                            
             if (mode == 3) {
                 return;
@@ -70,14 +72,14 @@ var getMedia = new Object ({
             else if (mode == 2){
                 cameraSource = Camera.PictureSourceType.PHOTOLIBRARY;
             }
-            //alert(cameraSource);
+            alert(cameraSource);
             
             if (!that.idcode) {
                 operatePlist.read("userinfo", readSuccess);
 
                 function readSuccess(responseData) {
-                               
-                    generateIDCode.idcode("LY", responseData.user_id, "iPhone", 1, generateSuccess);
+
+                    generateIDCode.idCode("TP", responseData.user_id, "iPhone", 1, generateSuccess);
 
                     function generateSuccess(idcode) {
                         that.idcode = idcode;
@@ -168,7 +170,7 @@ var getMedia = new Object ({
                 console.log("onCameraError");
             }
         }
-    },
+    }
                            
     /*var recorder = null,
     var mediaRecFile = null,
