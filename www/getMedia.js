@@ -55,7 +55,7 @@ var getMedia = new Object ({
                            
         function sheetSuccess(buttonIndex) {
             mode = buttonIndex;
-            alert(mode);
+            //alert(mode);
                            
             if (mode == 3) {
                 return;
@@ -72,20 +72,15 @@ var getMedia = new Object ({
             else if (mode == 2){
                 cameraSource = Camera.PictureSourceType.PHOTOLIBRARY;
             }
-            alert(cameraSource);
+            //alert(cameraSource);
             
             if (!that.idcode) {
-                operatePlist.read("userinfo", readSuccess);
+                generateIDCode.idCode("TP", generateSuccess);
 
-                function readSuccess(responseData) {
-
-                    generateIDCode.idCode("TP", responseData.user_id, "iPhone", 1, generateSuccess);
-
-                    function generateSuccess(idcode) {
-                        that.idcode = idcode;
-                        caputrePhoto(cameraSource, showImgDivId, showImgId, idcode, that.photoCount);
-                        that.photoCount++;
-                    }
+                function generateSuccess(idcode) {
+                    that.idcode = idcode;
+                    caputrePhoto(cameraSource, showImgDivId, showImgId, idcode, that.photoCount);
+                    that.photoCount++;
                 }
             }
             else {
